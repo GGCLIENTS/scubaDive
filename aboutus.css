@@ -67,3 +67,13 @@
     width: 300px;
     height: 143px;
 }
+@media (max-width: 768px) {
+    /* Mobile-specific styles */
+    body {
+      font-size: 16px;
+    }
+    .container {
+      padding: 10px;
+    }
+  }
+  

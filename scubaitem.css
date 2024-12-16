@@ -95,3 +95,13 @@ header {
 .equipment-card button:hover {
     background-color: #003366;
 }
+@media (max-width: 768px) {
+    /* Mobile-specific styles */
+    body {
+      font-size: 16px;
+    }
+    .container {
+      padding: 10px;
+    }
+  }
+  

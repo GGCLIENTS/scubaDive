@@ -132,3 +132,13 @@ body {
         .delete-btn:hover {
             background-color: #c0392b;
         }
+        @media (max-width: 768px) {
+            /* Mobile-specific styles */
+            body {
+              font-size: 16px;
+            }
+            .container {
+              padding: 10px;
+            }
+          }
+          

@@ -132,3 +132,13 @@ iframe {
 .faq summary {
     font-weight: bold;
 }
+@media (max-width: 768px) {
+    /* Mobile-specific styles */
+    body {
+      font-size: 16px;
+    }
+    .container {
+      padding: 10px;
+    }
+  }
+  

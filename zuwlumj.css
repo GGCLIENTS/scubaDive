@@ -100,3 +100,13 @@ footer {
     width: 100%;
     bottom: 0;
 }
+@media (max-width: 768px) {
+    /* Mobile-specific styles */
+    body {
+      font-size: 16px;
+    }
+    .container {
+      padding: 10px;
+    }
+  }
+  

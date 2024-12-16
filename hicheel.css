@@ -87,3 +87,13 @@ a:visited {
 a:hover {
     color: #007BFF;
 }
+@media (max-width: 768px) {
+    /* Mobile-specific styles */
+    body {
+      font-size: 16px;
+    }
+    .container {
+      padding: 10px;
+    }
+  }
+  

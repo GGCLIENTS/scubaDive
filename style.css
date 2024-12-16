@@ -98,3 +98,13 @@ button:hover span{
 button:hover{
     border: none;
 }
+@media (max-width: 768px) {
+    /* Mobile-specific styles */
+    body {
+      font-size: 16px;
+    }
+    .container {
+      padding: 10px;
+    }
+  }
+  
