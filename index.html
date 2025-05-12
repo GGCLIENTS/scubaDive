@@ -1,32 +1,185 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to make a website - Easy Tutorials</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Матрицын Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .matrix {
+            background: #f9f9f9;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .matrix-row {
+            display: flex;
+            justify-content: center;
+        }
+        .matrix-cell {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2px;
+            background: white;
+            border: 1px solid #ddd;
+        }
+        .options {
+            margin: 15px 0;
+        }
+        .option {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f0f8ff;
+            border: 1px solid #cce0ff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .selected {
+            background: #cce0ff;
+            font-weight: bold;
+        }
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+    </style>
 </head>
-<div class="banner">
 <body>
-    <div class="banner">
-        <div class="navbar">
-            <img src="images/logo.png" class="logo">
-            <ul>
-                <li><a href="index.html">Нүүр</a></li>
-                <li><a href="aboutus.html">Бидний тухай</a></li>
-                <li><a href="hicheel.html">Хичээлүүд / үйлчилгээ</a></li>
-                <li><a href="comment.html">Сэтгэгдэл / Холбоо барих</a></li>
-            </ul>
-        </div>
-        <div class="content">
-            <h1>Scuba diving усанд сэлэлтийн хичээл болон зөвөлөмж</h1>
-            <p>Scuba diving усанд сэлэлт нь дэлхий даяар тархасан спортын нэг төрөл юм <br> та болон бусдад энэхүү гайхалтай спортыг зааж сургахаар бид ажилаж байна</p>
-            <div>
-                <a href="aboutus.html"><button type="button"><span></span>Дэлгэрэнгүй</button></a>
-                <a href="hicheel.html"><button type="button"><span></span>Захиалах</button></a>
-            </div>
-        </div>
-    </div>
-</div>
- </body>
+    <h1>Матрицын Үндсэн Quiz</h1>
+    <div id="quiz-container"></div>
+    <button onclick="checkAnswers()">Хариу шалгах</button>
+    <div id="result"></div>
+
+    <script>
+        const questions = [
+            {
+                matrix: [[1, 2], [3, 4]],
+                question: "Энэ матрицын тодорхойлогч хэд вэ?",
+                options: ["A. -2", "B. 2", "C. 10", "D. 0"],
+                correct: 0,
+                explanation: "Тодорхойлогч = (1×4) - (2×3) = 4 - 6 = -2"
+            },
+            {
+                matrix: [[2, 0], [0, 2]],
+                question: "Энэ матрицын урвуу матриц аль вэ?",
+                options: [
+                    "A. [[0.5, 0], [0, 0.5]]", 
+                    "B. [[2, 0], [0, 2]]", 
+                    "C. [[-2, 0], [0, -2]]", 
+                    "D. Урвуу матриц байхгүй"
+                ],
+                correct: 0,
+                explanation: "Адилхан хэмжээтэй матрицын урвуу нь элемент бүрийн урвуугаар солигдоно"
+            },
+            {
+                matrix: [[1, 1], [1, 1]],
+                question: "Энэ матрицын rank хэд вэ?",
+                options: ["A. 0", "B. 1", "C. 2", "D. 4"],
+                correct: 1,
+                explanation: "Бүх мөр/багана ижил тул rank нь 1"
+            },
+            {
+                matrix: [[1, 2, 3], [0, 1, 4], [5, 6, 0]],
+                question: "Энэ матрицын гурван баганын векторууд шугаман хамааралтай юу?",
+                options: [
+                    "A. Тийм", 
+                    "B. Үгүй", 
+                    "C. Зөвхөн 2 нь хамааралтай", 
+                    "D. Тооцоолох шаардлагатай"
+                ],
+                correct: 1,
+                explanation: "Тодорхойлогч нь 1 (≠0) тул шугаман хамааралгүй"
+            },
+            {
+                matrix: [[1, 0], [0, 0]],
+                question: "Энэ матрицын мөрийн орон зайны хэмжээс хэд вэ?",
+                options: ["A. 0", "B. 1", "C. 2", "D. 4"],
+                correct: 1,
+                explanation: "Зөвхөн 1 мөр бие даасан байна (1,0)"
+            }
+        ];
+
+        let userAnswers = new Array(questions.length).fill(null);
+
+        function renderMatrix(matrix) {
+            return `
+                <div class="matrix">
+                    ${matrix.map(row => `
+                        <div class="matrix-row">
+                            ${row.map(cell => `<div class="matrix-cell">${cell}</div>`).join('')}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = questions.map((q, index) => `
+                <div class="question">
+                    ${renderMatrix(q.matrix)}
+                    <p><strong>Асуулт ${index+1}:</strong> ${q.question}</p>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <div class="option ${userAnswers[index] === i ? 'selected' : ''}" 
+                                 onclick="selectAnswer(${index}, ${i})">
+                                ${opt}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectAnswer(questionIndex, optionIndex) {
+            userAnswers[questionIndex] = optionIndex;
+            renderQuiz();
+        }
+
+        function checkAnswers() {
+            const score = questions.reduce((acc, q, i) => 
+                acc + (userAnswers[i] === q.correct ? 1 : 0), 0);
+            
+            document.getElementById('result').innerHTML = `
+                <h3>Үр дүн: ${score}/${questions.length}</h3>
+                ${questions.map((q, i) => `
+                    <p class="${userAnswers[i] === q.correct ? 'correct' : 'incorrect'}">
+                        <strong>Асуулт ${i+1}:</strong> 
+                        ${userAnswers[i] === q.correct ? '✓' : '✗'} 
+                        (Зөв хариулт: ${q.options[q.correct]})<br>
+                        <small>${q.explanation}</small>
+                    </p>
+                `).join('')}
+            `;
+        }
+
+        // Initial render
+        renderQuiz();
+    </script>
+</body>
 </html>
